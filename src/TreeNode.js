@@ -18,11 +18,12 @@ class TreeNode extends React.Component {
     super(props);
 
     this.state = ({
-      
+      nodeHeight:0,
     })
 
     this.onNodeClick = this.onNodeClick.bind(this);
     this.onSwitcherClick = this.onSwitcherClick.bind(this);
+    this.calculateHeight = this.calculateHeight.bind(this);
   }
 
   renderTreeNode(child, key){
@@ -115,11 +116,21 @@ class TreeNode extends React.Component {
     );
   }
 
+  calculateHeight(element) {
+    // console.log(element.clientHeight);
+    this.setState({
+      nodeHeight:element.clientHeight
+    })
+  }
+
   renderChildren() {
     const { children, Key } = this.props;
+    const height = this.state.nodeHeight;
     return (
       <Show
         isExpanded = {this.props.isExpanded}
+        ref={this.calculateHeight}
+        nodeHeight = '80px'
       >
         {mapChildren(children,(item, index) => this.renderTreeNode(item, Key+"-"+index))}
       </Show>      
