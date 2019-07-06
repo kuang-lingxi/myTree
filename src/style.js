@@ -1,9 +1,14 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const Node = styled.div`
   margin-left: 15px;
   margin-top: 5px;
 `
+
+const Expanded = css`
+  transform:rotate(90deg) translate(3px, 3px);
+`
+
 const CheckBox = styled.input.attrs(props => ({
   type: 'checkbox',
   checked: props.isChecked ? true : false
@@ -24,8 +29,10 @@ const Triangle = styled.div`
   width: 0;
   height: 0;
   border: 5px solid transparent;
-  border-left-color: black;
+  border-left-color: ${props => (props.isSingle ? 'transparent' : 'black')};
   cursor: pointer;
+  transition: all .5s;
+  ${props => (props.isExpanded ? Expanded : '')}
 `
 
 const Item = styled.span`
@@ -33,7 +40,7 @@ const Item = styled.span`
 `
 
 const Show = styled.div`
-  display: ${props => (props.isExpended ? 'block' : 'none')}
+  display: ${props => (props.isExpanded ? 'block' : 'none')}
 `
 
 export {

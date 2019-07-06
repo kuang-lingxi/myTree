@@ -8,12 +8,16 @@ import {
 class Tree extends React.Component {
   constructor(props) {
     super(props);
-    this.state = ({
 
+    this.state = ({
+      halfCheckedKeys: [],
+      checkedKeys: [],
+      expandedKeys: [...this.props.defaultExpandedKeys],
     })
 
     this.rendertreeNode = this.renderTreeNode.bind(this);
     this.onNodeClick = this.onNodeClick.bind(this);
+    this.updateExpanded = this.updateExpanded.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -23,10 +27,7 @@ class Tree extends React.Component {
       const node = treeNodes[i];
       convertTreeToEntities(node, i+"", entities, null);
     }
-    const newState = {
-      halfCheckedKeys: [],
-      checkedKeys: [],
-      expandedKeys: [],
+    const newState = {   
       keyEntities: entities,
       treeNodes: treeNodes
     }
@@ -36,31 +37,36 @@ class Tree extends React.Component {
 
   renderTreeNode(child, key){
     return React.cloneElement(child, {
-      key,
       Key: key,
-      isHalfChecked: false,
-      isChecked: false,
-      isExpanded: true,
+      initKey: child.key,
+      isHalfChecked: this.state.halfCheckedKeys.includes(key),
+      isChecked: this.state.checkedKeys.includes(key),
+      isExpanded: this.state.expandedKeys.includes(child.key),
       halfCheckedKeys: this.state.halfCheckedKeys,
       checkedKeys: this.state.checkedKeys,
       expandedKeys: this.state.expandedKeys,
       keyEntities: this.state.keyEntities,
-      onNodeClick: this.state.onNodeClick
+      onNodeClick: this.onNodeClick,
+      updateExpanded: this.updateExpanded,
+      isSingle: !('children' in child.props)
     })
   }
 
-  onNodeClick(halfCheckedKeys, checkedKeys, expandedKeys, keyEntities) {
+  onNodeClick(halfCheckedKeys, checkedKeys) {
     this.setState({
       halfCheckedKeys,
-      checkedKeys,
-      expandedKeys,
-      keyEntities
+      checkedKeys
+    })
+  }
+
+  updateExpanded(expandedKeys) {
+    this.setState({
+      expandedKeys
     })
   }
 
   render() {
     const { treeNodes } = this.state;
-    console.log(this.state.keyEntities)
     return (
       <div>
           {treeNodes.map((item, index) => this.renderTreeNode(item, index+""))}

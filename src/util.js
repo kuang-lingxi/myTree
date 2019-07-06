@@ -54,47 +54,47 @@ export function conductCheck(clickKey, checkStatus, keyEntities) {
     halfCheckedKeys[key] = true;
   });
   let conduct = (parentNode) => {
-    console.log(parentNode);
     let checked = true,
         halfChecked = false;
-    let {children} = parentNode.node.props;
-
-    if(children) {
-      mapChildren(children, (item, index) => {
-        if(item.key in checkedKeys) {
+    let { childKey } = parentNode;
+    // console.log(children)
+    if(childKey.length > 0) {
+      mapChildren(childKey, (key) => {
+        if(key in checkedKeys && checkedKeys[key]) {
           halfChecked = true;
         }else {
           checked = false;
         }
       })
+    }else{
+      return ;
     }
-
+    
     halfCheckedKeys[parentNode.key] = halfChecked;
     checkedKeys[parentNode.key] = checked;
   }
   let conductDown = (currNode) => {
-    let { children } = currNode.node.props;
+    let { childKey } = currNode;
     conduct(currNode);
     // console.log(keyEntities[node.Key])
-    mapChildren(children, (node) => conductDown(keyEntities[node.key]));
+    mapChildren(childKey, (key) => conductDown(keyEntities[key]));
   }
 
   let conductUp = (currNode) => {
     conduct(currNode);
-    if(currNode.parent) {
-      console.log(currNode.parent)
-      conductUp(keyEntities[currNode.parent.key]);
+    
+    if(currNode.parentKey) {
+      conductUp(keyEntities[currNode.parentKey]);
     }
   }
 
   const currNode = keyEntities[clickKey];
   conductUp(currNode);
   conductDown(currNode);
-
+  
   let temp = {
     halfCheckedKeys: Object.keys(halfCheckedKeys).filter((item) => halfCheckedKeys[item]),
     checkedKeys: Object.keys(checkedKeys).filter((item) => checkedKeys[item])
   };
-  console.log(temp);
   return temp;
 }
