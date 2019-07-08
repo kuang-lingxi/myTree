@@ -60,23 +60,22 @@ export function conductCheck(clickKey, checkStatus, keyEntities) {
     // console.log(children)
     if(childKey.length > 0) {
       mapChildren(childKey, (key) => {
-        if(key in checkedKeys && checkedKeys[key]) {
+        if((key in checkedKeys && checkedKeys[key]) || (key in halfCheckedKeys && halfCheckedKeys[key])) {
           halfChecked = true;
-        }else {
+        }
+        if(!(key in checkedKeys) || !checkedKeys[key]) {
           checked = false;
         }
       })
     }else{
       return ;
     }
-    
     halfCheckedKeys[parentNode.key] = halfChecked;
     checkedKeys[parentNode.key] = checked;
   }
   let conductDown = (currNode) => {
     let { childKey } = currNode;
     conduct(currNode);
-    // console.log(keyEntities[node.Key])
     mapChildren(childKey, (key) => conductDown(keyEntities[key]));
   }
 

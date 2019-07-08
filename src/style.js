@@ -1,16 +1,4 @@
-import styled, { css, keyframes } from 'styled-components';
-
-const hiddenFrames = keyframes`
-  from {
-    height: ${props => props.nodeHeight}px
-  }
-
-  to {
-    height: 0px;
-    position: absolute;
-    left: -9999px
-  }
-`
+import styled, { css } from 'styled-components';
 
 const Node = styled.div`
   margin-left: 15px;
@@ -22,10 +10,11 @@ const Expanded = css`
 `
 
 const show = css`
-  display:block;
+  display: block;
 `
+
 const hidden = css`
-  display:none;
+  display: none;
 `
 
 const CheckBox = styled.input.attrs(props => ({
@@ -59,7 +48,7 @@ const Item = styled.span`
 `
 
 const Show = styled.div`
-  ${props => props.isExpanded ? show : hidden}
+  ${props => (props.isExpanded ? show : hidden)}
 `
 
 export {

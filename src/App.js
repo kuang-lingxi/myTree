@@ -10,8 +10,13 @@ function App() {
         defaultExpandedKeys = {["one", "two", "three"]}
       >
         <TreeNode title="0" key="one">
-          <TreeNode title="0-0" key="one-0"></TreeNode>
-          <TreeNode title="0-1" key="one-1"></TreeNode>
+          <TreeNode title="0-0" key="one-0">
+          </TreeNode>
+          <TreeNode title="0-1" key="one-1">
+            <TreeNode title="0-1-0" key="one-1-0"></TreeNode>
+            <TreeNode title="0-1-1" key="one-1-1"></TreeNode>
+            <TreeNode title="0-1-2" key="one-1-2"></TreeNode>
+          </TreeNode>
           <TreeNode title="0-2" key="one-2"></TreeNode>
         </TreeNode>
         <TreeNode title="1" key="two">
