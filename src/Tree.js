@@ -2,6 +2,7 @@ import React from 'react';
 import TreeNode from './TreeNode';
 import {
   convertTreeToEntities,
+  convertDataToTree
 } from './util'
 
 
@@ -11,8 +12,7 @@ class Tree extends React.Component {
 
     this.state = ({
       halfCheckedKeys: [],
-      checkedKeys: [],
-      expandedKeys: [...this.props.defaultExpandedKeys],
+      checkedKeys: []
     })
 
     this.rendertreeNode = this.renderTreeNode.bind(this);
@@ -21,17 +21,31 @@ class Tree extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const treeNodes = props.children;
-    const entities = {};
-    for(let i = 0, len = treeNodes.length; i < len; i++) {
-      const node = treeNodes[i];
-      convertTreeToEntities(node, i+"", entities, null);
+    function shouldSetState(name) {
+      return !(name in state);
     }
-    const newState = {   
-      keyEntities: entities,
-      treeNodes: treeNodes
+    const {treeData} = props;
+    let treeNodes = null,
+        newState = {};
+    if(shouldSetState('treeNodes')) {
+      if(treeData) {
+        let temp = convertDataToTree(treeData);
+        treeNodes = temp.treeNode;
+        newState.expandedKeys = temp.defaultExpanded;
+      }else {
+        treeNodes = props.children;
+      }
+      newState.treeNodes = treeNodes;
+      const entities = {};
+      for(let i = 0, len = treeNodes.length; i < len; i++) {
+        const node = treeNodes[i];
+        convertTreeToEntities(node, i+"", entities, null);
+      }
+      newState.keyEntities = entities;
+      return newState;
     }
-    return newState;
+
+    return null;
   }
 
 

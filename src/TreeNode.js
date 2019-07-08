@@ -127,7 +127,7 @@ class TreeNode extends React.Component {
 
   renderChildren() {
     const { children, Key } = this.props;
-    // console.log(this.state.showHeight)
+    // console.log(children)
     return (
       <Show
         isExpanded = {this.props.isExpanded}
@@ -139,7 +139,6 @@ class TreeNode extends React.Component {
   }
 
   render() {
-    // console.log(this.props)
     return (
       <Node>
         {this.renderSwitcher()}

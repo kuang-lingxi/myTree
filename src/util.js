@@ -1,3 +1,6 @@
+import React from 'react';
+import TreeNode from "./TreeNode";
+
 export function convertTreeToEntities(treeNode,key, entities, parentKey) {
   // console.log(key)
   let entity = {
@@ -13,6 +16,44 @@ export function convertTreeToEntities(treeNode,key, entities, parentKey) {
     entity['childKey'].push(key + "-" + index);
     return convertTreeToEntities(item, key+"-"+index, entities, key)
   })
+}
+
+export function convertDataToTree(treeData) {
+  let defaultExpanded = [];
+  function dataToTree(treeData, node) {
+    if(node.isExpanded) {
+      defaultExpanded.push(node.key);
+    }
+    if(node.children.length === 0) {
+      return (
+        <TreeNode
+          title={node.title}
+          key={node.key}
+        >
+
+        </TreeNode>
+      )
+    }else {
+      return (
+        <TreeNode
+          title={node.title}
+          key={node.key}
+        >
+          {node.children.map((key) => {
+            return dataToTree(treeData, treeData[key]);
+          })}
+        </TreeNode>
+      )
+    }
+  }
+  let treeNode = Object.keys(treeData).map((key) => {
+    let node = treeData[key];
+    if(!node.parent) {
+      return dataToTree(treeData, node);
+    }
+  })
+  treeNode = treeNode.filter(item => item)
+  return {treeNode, defaultExpanded};
 }
 
 export function mapChildren(children, f) {
