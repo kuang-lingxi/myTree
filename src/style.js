@@ -5,7 +5,7 @@ const Node = styled.div`
   margin-top: 5px;
 `
 
-const Expanded = css`
+const Expanded = css`  
   transform:rotate(90deg) translate(3px, 3px);
 `
 
